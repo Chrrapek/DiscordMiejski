@@ -28,7 +28,7 @@ async def on_message(message):
 
         if len(example) > 0:
             response = "**Słowo:** " + title[0] + "\n**Definicja:** " + definition[0] + "\n**Przykład:**" \
-                       + example[0].replace('*', '/*') + "\n**URL**: " + redirected_url
+                       + example[0].replace('*', '\*') + "\n**URL**: " + redirected_url
         else:
             response = "**Słowo:** " + title[0] + "\n**Definicja:** " + definition[0] + "\n**URL**: " + redirected_url
 
