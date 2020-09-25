@@ -23,12 +23,12 @@ async def on_message(message):
         http = BeautifulSoup(r.text, 'html.parser')
         redirected_url = http.find("link", {"rel": "canonical"})['href']
         title = [x.get_text() for x in http.findAll("h1")]
-        definition = [x.get_text().replace('*', '/*') for x in http.findAll("p")]
+        definition = [x.get_text() for x in http.findAll("p")]
         example = [x.get_text() for x in http.findAll("blockquote")]
 
         if len(example) > 0:
-            response = "**Słowo:** " + title[0] + "\n**Definicja:** " + definition[0] + "\n**Przykład:**" + example[0] + \
-                       "\n**URL**: " + redirected_url
+            response = "**Słowo:** " + title[0] + "\n**Definicja:** " + definition[0] + "\n**Przykład:**" \
+                       + example[0].replace('*', '/*') + "\n**URL**: " + redirected_url
         else:
             response = "**Słowo:** " + title[0] + "\n**Definicja:** " + definition[0] + "\n**URL**: " + redirected_url
 
