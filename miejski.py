@@ -32,7 +32,7 @@ class Miejski:
         return response
 
     @staticmethod
-    def get_stats(records: List[Record]):
+    def get_stats(records: List[Record]) -> str:
         result = "**STATYSTYKI**:\n"
         for i, record in enumerate(records):
             result += f'''**{i}. {record['user_name']}**: {record['points']} pkt. \n'''

@@ -42,7 +42,7 @@ class MiejskiStats(commands.Cog):
     async def stats(self, ctx: Context):
         print('Recieved stats request, processing...')
         result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', f'{ctx.guild.id}')
-        await ctx.send(await Miejski.get_stats(result))
+        await ctx.send(Miejski.get_stats(result))
 
 
 class Bot(commands.Bot):
