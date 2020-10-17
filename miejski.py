@@ -20,7 +20,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('!miejski'):
-        print("Recieved !miejski from " + message.author + ", processing")
+        print("Recieved !miejski from " + message.author.nick + ", processing")
         response = await get_message()
 
         await message.channel.send(response)
