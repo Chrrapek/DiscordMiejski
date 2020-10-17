@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
+from utils import Utils
+
 client = discord.Client()
 
 
@@ -17,12 +19,12 @@ async def on_message(message):
         return
 
     if message.content.startswith('!miejski'):
-        response = await getMessage()
+        response = await get_message()
 
         await message.channel.send(response)
 
 
-async def getMessage():
+async def get_message():
     url = 'https://www.miejski.pl/losuj'
     r = requests.get(url, allow_redirects=True)
     http = BeautifulSoup(r.text, 'html.parser')
@@ -34,13 +36,13 @@ async def getMessage():
     if len(example) > 0:
         response = "**Słowo:** " + title[0] \
                    + "\n**Ocena:** " + rating \
-                   + "\n**Definicja:** " + definition[0] \
-                   + "\n**Przykład:**" + example[0].replace('*', '\*') \
+                   + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
+                   + "\n**Przykład:**" + Utils.parse_html(example[0]) \
                    + "\n**URL**: " + redirected_url
     else:
         response = "**Słowo:** " + title[0] \
                    + "\n**Ocena:** " + rating \
-                   + "\n**Definicja:** " + definition[0] \
+                   + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
                    + "\n**URL**: " + redirected_url
     return response
 
