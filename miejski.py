@@ -35,5 +35,5 @@ class Miejski:
     def get_stats(records: List[Record]) -> str:
         result = "**STATYSTYKI**:\n"
         for i, record in enumerate(records):
-            result += f'''**{i}. {record['user_name']}**: {record['points']} pkt. \n'''
+            result += f'''**{i+1}. {record['user_name']}**: {record['points']} pkt. \n'''
         return result
