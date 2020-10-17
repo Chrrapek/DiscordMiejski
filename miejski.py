@@ -1,52 +1,35 @@
+import random
 import discord
-import requests
-from bs4 import BeautifulSoup
 import os
 
+from discord.ext.commands import Context
 from utils import Utils
+from discord.ext import commands
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.members = True
+
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print('Logged in as {0.user}'.format(client))
-    await client.get_channel(271732666653474826).send('Jestem od teraz w nowej wersji!')
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('------')
+    await bot.get_channel(271732666653474826).send("Jestem od teraz w nower wersji!")
 
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('!miejski'):
-        print("Recieved !miejski from " + message.author.name + ", processing")
-        response = await get_message()
-
-        await message.channel.send(response)
+@bot.command()
+async def miejski(ctx: Context):
+    print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
+    await ctx.send(await Utils.get_message())
 
 
-async def get_message():
-    url = 'https://www.miejski.pl/losuj'
-    r = requests.get(url, allow_redirects=True)
-    http = BeautifulSoup(r.text, 'html.parser')
-    redirected_url = http.find("link", {"rel": "canonical"})['href']
-    title = [x.get_text() for x in http.findAll("h1")]
-    definition = [x.get_text() for x in http.findAll("p")]
-    example = [x.get_text() for x in http.findAll("blockquote")]
-    rating = http.find("span", {"class": "rating"}).contents[0]
-    if len(example) > 0:
-        response = "**Słowo:** " + title[0] \
-                   + "\n**Ocena:** " + rating \
-                   + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
-                   + "\n**Przykład:**" + Utils.parse_html(example[0]) \
-                   + "\n**URL**: " + redirected_url
-    else:
-        response = "**Słowo:** " + title[0] \
-                   + "\n**Ocena:** " + rating \
-                   + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
-                   + "\n**URL**: " + redirected_url
-    return response
+@bot.command(description='Pomoc w decyzjach')
+async def choose(ctx, *choices: str):
+    await ctx.send(random.choice(choices))
 
 
-client.run(os.environ.get('DISCORD_TOKEN'))
+bot.run(os.environ.get('DISCORD_TOKEN'))
