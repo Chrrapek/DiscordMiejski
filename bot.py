@@ -37,8 +37,8 @@ class Bot(commands.Bot):
 
         # await self.get_channel(271732666653474826).send("Jestem od teraz w nowej wersji!")
 
-    @commands.command()
-    async def miejski(self, ctx: Context):
+    @commands.command(pass_context=True)
+    async def miejski(self, ctx):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
         await self.db.execute(
             'insert into users values(default, $1, $2, $3, 0) on conflict (server_id, user_id) do update set points = (select points from users where server_id=$1 and user_id=$2)+1;',
@@ -46,13 +46,13 @@ class Bot(commands.Bot):
         print('Executed database stuff')
         await ctx.send(await Miejski.get_message())
 
-    @commands.command()
-    async def stats(self, ctx: Context):
+    @commands.command(pass_context=True)
+    async def stats(self, ctx):
         print('Recieved stats request, processing...')
         result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', ctx.guild.id)
         await ctx.send(await Miejski.get_stats(result))
 
-    @commands.command()
+    @commands.command(pass_context=True)
     async def choose(self, ctx, *choices: str):
         await ctx.send(random.choice(choices))
 
