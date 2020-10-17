@@ -9,7 +9,7 @@ from discord.ext import commands
 
 
 bot = commands.Bot(command_prefix='!')
-db = await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
+db = asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
 
 
 @bot.event
