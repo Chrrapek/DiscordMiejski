@@ -1,15 +1,12 @@
 import random
-import discord
 import os
 
 from discord.ext.commands import Context
 from utils import Utils
 from discord.ext import commands
 
-intents = discord.Intents.default()
-intents.members = True
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='!')
 
 
 @bot.event
