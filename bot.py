@@ -3,7 +3,7 @@ import os
 import asyncpg
 import asyncio
 
-from discord.ext.commands import Context
+from discord.ext.commands import Context, bot
 
 from miejski import Miejski
 from discord.ext import commands
@@ -20,10 +20,9 @@ async def run():
 
 
 class Bot(commands.Bot):
-
     def __init__(self, **kwargs):
         super().__init__(
-            command_prefix='!'
+            command_prefix="!"
         )
         self.db = kwargs.pop('db')
 
@@ -35,7 +34,7 @@ class Bot(commands.Bot):
 
         # await self.get_channel(271732666653474826).send("Jestem od teraz w nowej wersji!")
 
-    @commands.command()
+    @bot.command()
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
         await self.db.execute(
@@ -44,13 +43,13 @@ class Bot(commands.Bot):
         print('Executed database stuff')
         await ctx.send(await Miejski.get_message())
 
-    @commands.command()
+    @bot.command()
     async def stats(self, ctx: Context):
         print('Recieved stats request, processing...')
         result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', ctx.guild.id)
         await ctx.send(await Miejski.get_stats(result))
 
-    @commands.command()
+    @bot.command()
     async def choose(self, ctx, *choices: str):
         await ctx.send(random.choice(choices))
 
