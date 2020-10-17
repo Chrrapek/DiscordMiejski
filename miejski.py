@@ -11,6 +11,7 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
+    await client.get_channel(271732666653474826).send('Jestem od teraz w nowej wersji!')
 
 
 @client.event
@@ -19,6 +20,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('!miejski'):
+        print("Recieved !miejski from " + message.author + ", processing")
         response = await get_message()
 
         await message.channel.send(response)
