@@ -3,7 +3,7 @@ import unittest
 from utils import Utils
 
 
-class TestMiejskiModule(unittest.TestCase):
+class TestModule(unittest.TestCase):
     def test_html_parsing(self):
         self.assertEqual(Utils.parse_html("This shoul* *e escaped"), "This shoul\* \*e escaped")
         self.assertEqual(Utils.parse_html("<b>This should be bold</b>"), "**This should be bold**")
