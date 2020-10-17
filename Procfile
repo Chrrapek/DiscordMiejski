@@ -1,1 +1,1 @@
-worker: python miejski.py
+worker: python bot.py
