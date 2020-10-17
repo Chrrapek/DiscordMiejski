@@ -25,6 +25,9 @@ class Bot(commands.Bot):
             command_prefix="!"
         )
         self.db = kwargs.pop('db')
+        self.add_command(self.miejski)
+        self.add_command(self.choose)
+        self.add_command(self.stats)
 
     async def on_ready(self):
         print('Logged in as')
@@ -34,7 +37,7 @@ class Bot(commands.Bot):
 
         # await self.get_channel(271732666653474826).send("Jestem od teraz w nowej wersji!")
 
-    @commands.command(name="miejski")
+    @commands.command()
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
         await self.db.execute(
@@ -43,13 +46,13 @@ class Bot(commands.Bot):
         print('Executed database stuff')
         await ctx.send(await Miejski.get_message())
 
-    @commands.command(name="stats")
+    @commands.command()
     async def stats(self, ctx: Context):
         print('Recieved stats request, processing...')
         result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', ctx.guild.id)
         await ctx.send(await Miejski.get_stats(result))
 
-    @commands.command(name="choose")
+    @commands.command()
     async def choose(self, ctx, *choices: str):
         await ctx.send(random.choice(choices))
 
