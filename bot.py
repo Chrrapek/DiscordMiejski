@@ -19,21 +19,10 @@ async def run():
         await bot.logout()
 
 
-class Bot(commands.Bot):
-
-    def __init__(self, **kwargs):
-        super().__init__(
-            command_prefix='!'
-        )
+class MiejskiRandomWord(commands.Cog):
+    def __init__(self, bot, **kwargs):
+        self.bot = bot
         self.db = kwargs.pop('db')
-
-    async def on_ready(self):
-        print('Logged in as')
-        print(self.user.name)
-        print(self.user.id)
-        print('------')
-
-        # await self.get_channel(271732666653474826).send("Jestem od teraz w nowej wersji!")
 
     @commands.command()
     async def miejski(self, ctx: Context):
@@ -44,15 +33,36 @@ class Bot(commands.Bot):
         print('Executed database stuff')
         await ctx.send(await Miejski.get_message())
 
+
+class MiejskiStats(commands.Cog):
+    def __init__(self, bot, **kwargs):
+        self.bot = bot
+        self.db = kwargs.pop('db')
+
     @commands.command()
     async def stats(self, ctx: Context):
         print('Recieved stats request, processing...')
         result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', ctx.guild.id)
         await ctx.send(await Miejski.get_stats(result))
 
-    @commands.command()
-    async def choose(self, ctx, *choices: str):
-        await ctx.send(random.choice(choices))
+
+class Bot(commands.Bot):
+
+    def __init__(self, **kwargs):
+        super().__init__(
+            command_prefix='!'
+        )
+        self.db = kwargs.pop('db')
+        self.add_cog(MiejskiRandomWord(self, db=self.db))
+        self.add_cog(MiejskiStats(self, db=self.db))
+
+    async def on_ready(self):
+        print('Logged in as')
+        print(self.user.name)
+        print(self.user.id)
+        print('------')
+
+        # await self.get_channel(271732666653474826).send("Jestem od teraz w nowej wersji!")
 
 
 loop = asyncio.get_event_loop()
