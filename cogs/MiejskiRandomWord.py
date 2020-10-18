@@ -16,6 +16,6 @@ class MiejskiRandomWord(commands.Cog):
         response = await Miejski.get_message()
         await self.db.execute(
             'insert into users values(default, $1, $2, $3, $4) on conflict (server_id, user_id) do update set points = (select points from users where server_id=$1 and user_id=$2)+$4;',
-            f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}', response[0])
+            f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}', int(response[0]))
         print('Executed database stuff')
         await ctx.send(response[1])
