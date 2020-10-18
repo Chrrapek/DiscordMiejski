@@ -9,7 +9,7 @@ from utils import Utils
 
 class Miejski:
     @staticmethod
-    async def get_message() -> str:
+    async def get_message():
         url = 'https://www.miejski.pl/losuj'
         r = requests.get(url, allow_redirects=True)
         http = BeautifulSoup(r.text, 'html.parser')
@@ -27,7 +27,7 @@ class Miejski:
             response = "**Słowo:** " + title[0] \
                        + "\n**Ocena:** " + rating \
                        + "\n**Definicja:** " + Utils.parse_html(definition[0])
-        return response
+        return rating, response
 
     @staticmethod
     def get_stats(records: List[Record]) -> str:
