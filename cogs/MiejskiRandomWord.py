@@ -19,3 +19,9 @@ class MiejskiRandomWord(commands.Cog):
             f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}', int(response[0]))
         print('Executed database stuff')
         await ctx.send(response[1])
+
+    @miejski.error
+    async def miejski_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            user = self.bot.get_user(ctx.author.id)
+            await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after}s')
