@@ -4,7 +4,7 @@ from discord.ext.commands import Context
 from miejski import Miejski
 
 
-class MiejskiRandomWord(commands.Cog):
+class MiejskiCog(commands.Cog):
     def __init__(self, bot, **kwargs):
         self.bot = bot
         self.db = kwargs.pop('db')
@@ -20,8 +20,15 @@ class MiejskiRandomWord(commands.Cog):
         print('Executed database stuff')
         await ctx.send(response[1])
 
+    @commands.command()
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    async def stats(self, ctx: Context):
+        print('Recieved stats request, processing...')
+        result = await self.db.fetch('select USER_NAME, POINTS from users where SERVER_ID=$1 order by POINTS desc;', f'{ctx.guild.id}')
+        await ctx.send(Miejski.get_stats(result))
+
     @miejski.error
     async def miejski_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             user = self.bot.get_user(ctx.author.id)
-            await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after}s')
+            await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')

@@ -1,12 +1,8 @@
-import random
-
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from miejski import Miejski
 
-
-class RedditHmmm(commands.Cog):
+class RedditCog(commands.Cog):
     def __init__(self, bot, **kwargs):
         self.bot = bot
         self.reddit_instance = kwargs.pop('reddit_instance')

@@ -3,11 +3,11 @@ import asyncpg
 import asyncio
 import praw
 
-from cogs.MiejskiRandomWord import MiejskiRandomWord
-from cogs.MiejskiStats import MiejskiStats
+from cogs.ChooseCog import ChooseCog
+from cogs.MiejskiCog import MiejskiCog
 from discord.ext import commands
 
-from cogs.RedditHmmm import RedditHmmm
+from cogs.RedditCog import RedditCog
 
 
 async def run():
@@ -32,9 +32,9 @@ class Bot(commands.Bot):
         )
         self.db = kwargs.pop('db')
         self.reddit_instance = kwargs.pop('reddit_instance')
-        self.add_cog(MiejskiRandomWord(self, db=self.db))
-        self.add_cog(MiejskiStats(self, db=self.db))
-        self.add_cog(RedditHmmm(self, reddit_instance=self.reddit_instance))
+        self.add_cog(MiejskiCog(self, db=self.db))
+        self.add_cog(RedditCog(self, reddit_instance=self.reddit_instance))
+        self.add_cog(ChooseCog(self))
 
     async def on_ready(self):
         print('Logged in as')
