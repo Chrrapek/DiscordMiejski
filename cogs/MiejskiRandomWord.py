@@ -10,7 +10,7 @@ class MiejskiRandomWord(commands.Cog):
         self.db = kwargs.pop('db')
 
     @commands.command()
-    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
         response = await Miejski.get_message()
