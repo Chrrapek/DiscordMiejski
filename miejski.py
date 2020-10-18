@@ -22,13 +22,11 @@ class Miejski:
             response = "**Słowo:** " + title[0] \
                        + "\n**Ocena:** " + rating \
                        + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
-                       + "\n**Przykład:**" + Utils.parse_html(example[0]) \
-                       + "\n**URL**: " + redirected_url
+                       + "\n**Przykład:**" + Utils.parse_html(example[0])
         else:
             response = "**Słowo:** " + title[0] \
                        + "\n**Ocena:** " + rating \
-                       + "\n**Definicja:** " + Utils.parse_html(definition[0]) \
-                       + "\n**URL**: " + redirected_url
+                       + "\n**Definicja:** " + Utils.parse_html(definition[0])
         return response
 
     @staticmethod
