@@ -8,7 +8,7 @@ class HelpCog(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.guild)
-    async def help(self, ctx: Context):
+    async def pomoc(self, ctx: Context):
         help_msg = f'**Pomoc:**' \
                f'\n**!miejski** - losuje słowo z miejski.pl i przydziela użytkownikowi tyle pkt ile wynosi jego ocena. Cooldown 10 minut dla użytkownika' \
                f'\n**!stats** - wyświetla liczbę punktów użytkowników serwera. Cooldown 30 sekund w ramach serwera' \
