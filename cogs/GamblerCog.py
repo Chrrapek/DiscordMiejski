@@ -1,5 +1,7 @@
 import random
+from typing import List
 
+from asyncpg import Record
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -12,9 +14,10 @@ class GamblerCog(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 600, commands.BucketType.user)
     async def gamble(self, ctx: Context, amount=0):
-        result = await self.db.fetch('SELECT POINTS FROM users WHERE USER_ID=$1 AND SERVER_ID=$2', f'{ctx.author.id}',
-                                     f'{ctx.guild.id}')
-        points = result['points']
+        result: List[Record] = await self.db.fetch('SELECT * FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
+                                                   f'{ctx.author.id}',
+                                                   f'{ctx.guild.id}')
+        points = int(result[0]["points"])
         if points == 0:
             await ctx.send(f'{ctx.author.id}, nie masz czym grać...')
             return

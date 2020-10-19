@@ -13,7 +13,6 @@ class Miejski:
         url = 'https://www.miejski.pl/losuj'
         r = requests.get(url, allow_redirects=True)
         http = BeautifulSoup(r.text, 'html.parser')
-        redirected_url = http.find("link", {"rel": "canonical"})['href']
         title = [x.get_text() for x in http.findAll("h1")]
         definition = [x.get_text() for x in http.findAll("p")]
         example = [x.get_text() for x in http.findAll("blockquote")]
