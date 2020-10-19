@@ -4,6 +4,7 @@ import asyncio
 import praw
 
 from cogs.ChooseCog import ChooseCog
+from cogs.GamblerCog import GamblerCog
 from cogs.MiejskiCog import MiejskiCog
 from discord.ext import commands
 
@@ -35,6 +36,7 @@ class Bot(commands.Bot):
         self.add_cog(MiejskiCog(self, db=self.db))
         self.add_cog(RedditCog(self, reddit_instance=self.reddit_instance))
         self.add_cog(ChooseCog(self))
+        self.add_cog(GamblerCog(self, db=self.db))
 
     async def on_ready(self):
         print('Logged in as')
