@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord.ext.commands import Context
-
+import requests
 from miejski import Miejski
 
 
@@ -31,4 +31,6 @@ class MiejskiCog(commands.Cog):
     async def miejski_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             user = self.bot.get_user(ctx.author.id)
+            insult = requests.get("https://evilinsult.com/generate_insult.php?lang=en").text
+            await ctx.send(insult)
             await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')
