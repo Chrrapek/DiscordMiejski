@@ -44,3 +44,9 @@ class GamblerCog(commands.Cog):
                     await ctx.send(f'{ctx.author.name} nie wszedł pewniaczek i ma teraz {points - amount} punktów...')
             elif amount > points:
                 await ctx.send(f'{ctx.author.name} nie cwaniakuj, nie masz tyle punkcików')
+
+    @gamble.error
+    async def gamble_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            user = self.bot.get_user(ctx.author.id)
+            await user.send(f'Masz cooldown na !gamble. Jeszcze {error.retry_after} s')
