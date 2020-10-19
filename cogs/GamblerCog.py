@@ -12,7 +12,7 @@ class GamblerCog(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 600, commands.BucketType.user)
     async def gamble(self, ctx: Context, amount=0):
-        result = self.db.execute('SELECT POINTS FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
+        result = self.db.fetch('SELECT POINTS FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
                                  f'{ctx.author.id}', f'{ctx.guild.id}')
         points = int(result["points"])
         if points == 0:
