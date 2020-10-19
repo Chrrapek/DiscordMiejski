@@ -14,7 +14,7 @@ class GamblerCog(commands.Cog):
     async def gamble(self, ctx: Context, amount=0):
         result = await self.db.fetch('SELECT POINTS FROM users WHERE USER_ID=$1 AND SERVER_ID=$2', f'{ctx.author.id}',
                                      f'{ctx.guild.id}')
-        points = int(result[0])
+        points = result["points"]
         if points == 0:
             await ctx.send(f'{ctx.author.id}, nie masz czym grać...')
             return
