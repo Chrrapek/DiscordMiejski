@@ -21,6 +21,8 @@ class GamblerCog(commands.Cog):
         if points == 0:
             await ctx.send(f'{ctx.author.name}, nie masz czym grać...')
             return
+        elif amount < 0:
+            await ctx.send(f'{ctx.author.name}, proszę tu nie cwaniaczkować')
         else:
             if amount == 0:
                 if random.choice(['double', 'zero']) == 'double':
