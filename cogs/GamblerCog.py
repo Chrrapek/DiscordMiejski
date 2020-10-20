@@ -18,6 +18,9 @@ class GamblerCog(commands.Cog):
                                                    f'{ctx.author.id}',
                                                    f'{ctx.guild.id}')
         points = int(result[0]["points"])
+        if not isinstance(amount, int):
+            await ctx.send(f'Gramy obstawiając liczbami naturalnymi, {ctx.author.name}')
+            return
         if points == 0:
             await ctx.send(f'{ctx.author.name}, nie masz czym grać...')
             return
