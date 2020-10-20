@@ -12,7 +12,7 @@ class GamblerCog(commands.Cog):
         self.db = kwargs.pop('db')
 
     @commands.command()
-    @commands.cooldown(1, 600, commands.BucketType.user)
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def gamble(self, ctx: Context, amount=0):
         result: List[Record] = await self.db.fetch('SELECT * FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
                                                    f'{ctx.author.id}',
