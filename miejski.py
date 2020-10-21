@@ -19,14 +19,18 @@ class MiejskiMessage:
         return len(self.example) > 0
 
     def to_string(self) -> str:
-        response = "**Słowo:** " + self.title \
-                   + "\n**Ocena:** " + self.rating \
-                   + "\n**Definicja:** " + Utils.parse_html(self.definition)
-
         if self.has_example():
-            return response + "\n**Przykład:** " + Utils.parse_html(self.example)
+            return self.to_string_without_example() + self.example_to_string()
         else:
-            return response
+            return self.to_string_without_example()
+
+    def to_string_without_example(self):
+        return "**Słowo:** " + self.title \
+               + "\n**Ocena:** " + self.rating \
+               + "\n**Definicja:** " + Utils.parse_html(self.definition)
+
+    def example_to_string(self) -> str:
+        return "\n**Przykład:** " + Utils.parse_html(self.example)
 
 
 class Miejski:
