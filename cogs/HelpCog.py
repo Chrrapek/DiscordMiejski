@@ -14,6 +14,7 @@ class HelpCog(commands.Cog):
                f'\n**!stats** - wyświetla liczbę punktów użytkowników serwera. Cooldown 30 sekund w ramach serwera' \
                f'\n**!gamble [wartość]** - 50% szans na podwojenie postawionej wartości, 50% na stracenie. Bez podania wartości do losowania idą wszystkie posiadane punkty użytkownika. Cooldown 10 minut dla użytkownika' \
                f'\n**!choose [opcje]** - losuje jedną z podanych opcji (opcje muszą być rozdzielone spacją)' \
-               f'\n**!pomoc** - wyświetla tę pomoc. Cooldown 5 minut w ramach serwera'
+               f'\n**!pomoc** - wyświetla tę pomoc. Cooldown 5 minut w ramach serwera' \
+               f'\n**!zabawa** [czas w sekundach] - Zgadywanie hasła po przykładzie. Domyślna wartość czasu to 15s'
 
         await ctx.send(help_msg)
