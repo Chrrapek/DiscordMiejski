@@ -16,7 +16,7 @@ class GuessCog(commands.Cog):
             try:
                 delay = int(delay_in_s[0])
             except:
-                ctx.send("Podaj samą liczbę sekund, bez żadnego s czy innego gówna")
+                await ctx.send("Podaj samą liczbę sekund, bez żadnego s czy innego gówna")
 
         message = await Miejski.get_message()
         if message.has_example():
