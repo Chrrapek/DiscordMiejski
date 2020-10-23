@@ -1,15 +1,11 @@
-import os
 from typing import List
 
-import asyncpg
-from async_property import async_property
 from asyncpg import Record
 
 
 class DatabaseController:
-    @async_property
-    async def db(self):
-        return await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
+    def __init__(self, db):
+        self.db = db
 
     def close(self):
         self.db.close()

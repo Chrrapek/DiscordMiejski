@@ -34,3 +34,4 @@ class MiejskiCog(commands.Cog):
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
             await ctx.send('Sorki, wykopyrtnąłem się i gdybym miał nóżki to bym nimi machał')
+
