@@ -2,7 +2,7 @@ import time
 
 from discord.ext import commands
 
-from miejski import Miejski
+from controllers.MiejskiController import Miejski
 
 
 class GuessCog(commands.Cog):

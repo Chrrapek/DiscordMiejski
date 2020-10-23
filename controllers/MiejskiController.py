@@ -4,7 +4,7 @@ import requests
 from asyncpg import Record
 from bs4 import BeautifulSoup
 
-from utils import Utils
+from utils.Utils import Utils
 
 
 class MiejskiMessage:

@@ -1,23 +1,20 @@
 import random
-from typing import List
 
-from asyncpg import Record
 from discord.ext import commands
 from discord.ext.commands import Context
+
+from controllers.DatabaseController import DatabaseController
 
 
 class GamblerCog(commands.Cog):
     def __init__(self, bot, **kwargs):
         self.bot = bot
-        self.db = kwargs.pop('db')
+        self.db: DatabaseController = kwargs.pop('db')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def gamble(self, ctx: Context, amount=0):
-        result: List[Record] = await self.db.fetch('SELECT * FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
-                                                   f'{ctx.author.id}',
-                                                   f'{ctx.guild.id}')
-        points = int(result[0]["points"])
+        points = await self.db.fetch_user_points(f'{ctx.author.id}', f'{ctx.guild.id}')
         if not isinstance(amount, int):
             await ctx.send(f'Gramy obstawiając liczbami naturalnymi, {ctx.author.name}')
             return
@@ -28,24 +25,22 @@ class GamblerCog(commands.Cog):
             await ctx.send(f'{ctx.author.name}, proszę tu nie cwaniaczkować')
         else:
             if amount == 0:
-                if random.choice(['double', 'zero']) == 'double':
-                    points *= 2
-                    await self.db.execute('UPDATE users SET POINTS=$1 WHERE USER_ID=$2 AND SERVER_ID=$3',
-                                          points, f'{ctx.author.id}', f'{ctx.guild.id}')
+                multiplier = random.choice([0, 2])
+                if multiplier == 0:
+                    await ctx.send(f'Va banque! Niestety, {ctx.author.name}, ale tracisz wszystkie punkty...')
+                else:
                     await ctx.send(
                         f'Va banque! Brawo {ctx.author.name}, podwajasz swoje punkty i masz ich teraz {points}!')
-                else:
-                    await self.db.execute('UPDATE users SET POINTS=0 WHERE USER_ID=$1 AND SERVER_ID=$2',
-                                          f'{ctx.author.id}', f'{ctx.guild.id}')
-                    await ctx.send(f'Va banque! Niestety, {ctx.author.name}, ale tracisz wszystkie punkty...')
+                points *= multiplier
+                await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}', points)
             elif amount <= points:
-                if random.choice(['double', 'zero']) == 'double':
-                    await self.db.execute('UPDATE users SET POINTS=$1 WHERE USER_ID=$2 AND SERVER_ID=$3',
-                                          points + amount, f'{ctx.author.id}', f'{ctx.guild.id}')
+                if random.choice([0, 2]) == 2:
+                    await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}',
+                                                     points + amount)
                     await ctx.send(f'{ctx.author.name} wszedł pewniaczek i ma teraz {points + amount} punktów!')
                 else:
-                    await self.db.execute('UPDATE users SET POINTS=$1 WHERE USER_ID=$2 AND SERVER_ID=$3',
-                                          points - amount, f'{ctx.author.id}', f'{ctx.guild.id}')
+                    await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}',
+                                                     points - amount)
                     await ctx.send(f'{ctx.author.name} nie wszedł pewniaczek i ma teraz {points - amount} punktów...')
             elif amount > points:
                 await ctx.send(f'{ctx.author.name} nie cwaniakuj, nie masz tyle punkcików')
@@ -55,3 +50,6 @@ class GamblerCog(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             user = self.bot.get_user(ctx.author.id)
             await user.send(f'Masz cooldown na !gamble. Jeszcze {error.retry_after} s')
+        else:
+            print(f'Error wywolany przez {ctx.author.name}: {error}')
+            await ctx.send('Sorki, wykopyrtnąłem się i gdybym miał nóżki to bym nimi machał')
