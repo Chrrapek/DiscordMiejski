@@ -13,7 +13,7 @@ class DatabaseController:
     async def upsert_user_points(self, server_id: str, author_id: str, author_name: str, points: int):
         print('Upserting user points')
         await self.db.execute(
-            'insert into users values(default, $1, $2, $3, $4) on conflict (server_id, user_id) do update set points = (select points from users where server_id=$1 and user_id=$2)+$4;',
+            'insert into users values(default, $1, $2, $3, $4) on conflict (server_id, user_id) do update set points=$4;',
             server_id, author_id, author_name, points)
         print('Executed upsert')
 
