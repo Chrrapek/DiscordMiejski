@@ -30,7 +30,7 @@ class GamblerCog(commands.Cog):
                     await ctx.send(f'Va banque! Niestety, {ctx.author.name}, ale tracisz wszystkie punkty...')
                 else:
                     await ctx.send(
-                        f'Va banque! Brawo {ctx.author.name}, podwajasz swoje punkty i masz ich teraz {points}!')
+                        f'Va banque! Brawo {ctx.author.name}, podwajasz swoje punkty i masz ich teraz {points * multiplier}!')
                 points *= multiplier
                 await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}', points)
             elif amount <= points:
