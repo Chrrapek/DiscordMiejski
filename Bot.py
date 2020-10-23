@@ -1,20 +1,22 @@
-import os
-import asyncpg
 import asyncio
+import os
+
+import asyncpg
 import praw
+from discord.ext import commands
 
 from cogs.ChooseCog import ChooseCog
 from cogs.GamblerCog import GamblerCog
 from cogs.GuessCog import GuessCog
 from cogs.HelpCog import HelpCog
 from cogs.MiejskiCog import MiejskiCog
-from discord.ext import commands
-
 from cogs.RedditCog import RedditCog
+from controllers.DatabaseController import DatabaseController
 
 
 async def run():
-    db = await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
+    pool = await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
+    db = DatabaseController(pool)
     reddit = praw.Reddit(
         client_id=os.environ.get('REDDIT_APP_NAME'),
         client_secret=os.environ.get('REDDIT_SECRET'),
