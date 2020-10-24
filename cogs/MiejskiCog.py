@@ -15,13 +15,13 @@ class MiejskiCog(commands.Cog):
     @commands.cooldown(1, 600, commands.BucketType.user)
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
+        current_points = await self.db.fetch_user_points(f'{ctx.author.id}', f'{ctx.guild.id}')
         message = await Miejski.get_message()
         await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}',
-                                         int(message.rating))
+                                         current_points + int(message.rating))
         await ctx.send(message.to_string())
 
     @commands.command()
-    @commands.cooldown(1, 30, commands.BucketType.guild)
     async def stats(self, ctx: Context):
         print('Recieved command !stats, processing...')
         result = await self.db.fetch_users_points(f'{ctx.guild.id}')
