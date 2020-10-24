@@ -15,6 +15,10 @@ class GuessCog(commands.Cog):
         if len(delay_in_s) > 0:
             try:
                 delay = int(delay_in_s[0])
+                if delay > 120:
+                    await ctx.send(
+                        "Albo jesteś Kacprem albo Cię pojebało, żeby dawać taki delay. Nie słucham takiego gówna.")
+                    return
             except:
                 await ctx.send("Podaj samą liczbę sekund, bez żadnego s czy innego gówna")
 
