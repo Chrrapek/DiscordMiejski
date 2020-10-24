@@ -3,6 +3,7 @@ from discord.ext.commands import Context
 
 from controllers.DatabaseController import DatabaseController
 from controllers.MiejskiController import Miejski
+from utils.ErrorMessages import ErrorMessages
 
 
 class MiejskiCog(commands.Cog):
@@ -33,5 +34,5 @@ class MiejskiCog(commands.Cog):
             await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
-            await ctx.send('Sorki, wykopyrtnąłem się i gdybym miał nóżki to bym nimi machał')
+            await ctx.send(ErrorMessages.get_random_error_message())
 

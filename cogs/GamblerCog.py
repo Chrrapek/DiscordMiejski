@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 from controllers.DatabaseController import DatabaseController
+from utils.ErrorMessages import ErrorMessages
 
 
 class GamblerCog(commands.Cog):
@@ -52,4 +53,4 @@ class GamblerCog(commands.Cog):
             await user.send(f'Masz cooldown na !gamble. Jeszcze {error.retry_after} s')
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
-            await ctx.send('Sorki, wykopyrtnąłem się i gdybym miał nóżki to bym nimi machał')
+            await ctx.send(ErrorMessages.get_random_error_message())

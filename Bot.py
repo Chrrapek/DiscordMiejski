@@ -10,6 +10,7 @@ from cogs.GamblerCog import GamblerCog
 from cogs.GuessCog import GuessCog
 from cogs.HelpCog import HelpCog
 from cogs.MiejskiCog import MiejskiCog
+from cogs.RabbinCog import RabbinCog
 from cogs.RedditCog import RedditCog
 from controllers.DatabaseController import DatabaseController
 
@@ -43,6 +44,7 @@ class Bot(commands.Bot):
         self.add_cog(GamblerCog(self, db=self.db))
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
+        self.add_cog(RabbinCog(self))
 
     async def on_ready(self):
         print('Logged in as')
