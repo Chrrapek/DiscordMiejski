@@ -1,4 +1,4 @@
-import time
+import asyncio
 
 from discord.ext import commands
 
@@ -25,7 +25,7 @@ class GuessCog(commands.Cog):
         message = await Miejski.get_message()
         if message.has_example():
             await ctx.send(message.example_to_string())
-            time.sleep(delay)
+            await asyncio.sleep(delay)
             await ctx.send(message.to_string_without_example())
         else:
             await ctx.send("No i chuj, bo haslo nie ma przykladu")
