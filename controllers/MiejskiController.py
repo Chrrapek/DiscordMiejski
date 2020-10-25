@@ -43,6 +43,7 @@ class Miejski:
         definition = [x.get_text() for x in http.findAll("p")]
         example = [x.get_text() for x in http.findAll("blockquote")]
         rating = http.find("span", {"class": "rating"}).contents[0]
+        print(f"title: {title}\ndefinition: {definition}\nexample: {example}\nrating: {rating}")
         return MiejskiMessage(title[0], rating[0], definition[0], example[0])
 
     @staticmethod
