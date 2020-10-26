@@ -9,7 +9,7 @@ from utils.Utils import Utils
 
 class MiejskiMessage:
 
-    def __init__(self, title: str, rating: str, definition: str, example: str):
+    def __init__(self, title: str, rating: str, definition: str, example=''):
         self.title = title
         self.rating = rating
         self.definition = definition
@@ -43,8 +43,9 @@ class Miejski:
         definition = [x.get_text() for x in http.findAll("p")]
         example = [x.get_text() for x in http.findAll("blockquote")]
         rating = http.find("span", {"class": "rating"}).contents[0]
-        print(f"title: {title}\ndefinition: {definition}\nexample: {example}\nrating: {rating}")
-        return MiejskiMessage(title[0], rating[0], definition[0], example[0])
+        print(f"[Title: {title}, definition: {definition}, example: {example}, rating: {rating}]")
+        return MiejskiMessage(title[0], rating[0], definition[0], example[0]) if len(example) > 0 else MiejskiMessage(
+            title[0], rating[0], definition[0])
 
     @staticmethod
     def get_stats(records: List[Record]) -> str:
