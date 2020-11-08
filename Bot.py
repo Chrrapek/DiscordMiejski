@@ -3,6 +3,7 @@ import os
 
 import asyncpg
 import praw
+from cogs.MemoryCog import MemoryCog
 from discord.ext import commands
 
 from cogs.ChooseCog import ChooseCog
@@ -13,6 +14,7 @@ from cogs.MiejskiCog import MiejskiCog
 from cogs.RabbinCog import RabbinCog
 from cogs.RedditCog import RedditCog
 from controllers.DatabaseController import DatabaseController
+from praw.models import Subreddit
 
 
 async def run():
@@ -23,7 +25,7 @@ async def run():
         client_secret=os.environ.get('REDDIT_SECRET'),
         user_agent="ChrapBot by u/Chramar"
     ).subreddit("hmmm")
-    bot = Bot(db=db, reddit_instance=reddit)
+    bot = Bot(db, reddit)
     try:
         await bot.start(os.environ.get('DISCORD_TOKEN'))
     except KeyboardInterrupt:
@@ -32,19 +34,18 @@ async def run():
 
 
 class Bot(commands.Bot):
-    def __init__(self, **kwargs):
+    def __init__(self, db: DatabaseController, reddit_instance: Subreddit, **kwargs):
         super().__init__(
             command_prefix='!'
         )
-        self.db = kwargs.pop('db')
-        self.reddit_instance = kwargs.pop('reddit_instance')
-        self.add_cog(MiejskiCog(self, db=self.db))
-        self.add_cog(RedditCog(self, reddit_instance=self.reddit_instance))
+        self.add_cog(MiejskiCog(self, db=db))
+        self.add_cog(RedditCog(self, reddit_instance=reddit_instance))
         self.add_cog(ChooseCog(self))
-        self.add_cog(GamblerCog(self, db=self.db))
+        self.add_cog(GamblerCog(self, db=db))
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
         self.add_cog(RabbinCog(self))
+        self.add_cog(MemoryCog())
 
     async def on_ready(self):
         print('Logged in as')
