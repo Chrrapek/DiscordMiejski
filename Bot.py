@@ -39,7 +39,7 @@ class Bot(commands.Bot):
             command_prefix='!'
         )
         self.add_cog(MiejskiCog(self, db=db))
-        self.add_cog(RedditCog(self, reddit_instance=reddit_instance))
+        self.add_cog(RedditCog(self, reddit_instance))
         self.add_cog(ChooseCog(self))
         self.add_cog(GamblerCog(self, db=db))
         self.add_cog(HelpCog(self))
