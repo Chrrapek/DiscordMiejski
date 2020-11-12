@@ -9,8 +9,8 @@ class RedditCog(commands.Cog):
         self.bot = bot
         self.reddit_instance = reddit_instance
 
-    @commands.command()
-    async def hmmm(self, ctx: Context):
+    @commands.command(name="hmmm-top")
+    async def hmmm_top(self, ctx: Context):
         print('Recieved /r/hmmm request, processing...')
         top = [post for post in self.reddit_instance.top("week")]
         random.shuffle(top)
@@ -18,7 +18,7 @@ class RedditCog(commands.Cog):
         await ctx.send(selected_post.url)
 
     @commands.command()
-    async def hmmm_old(self, ctx: Context):
+    async def hmmm(self, ctx: Context):
         print('Recieved /r/hmmm request, processing...')
         selected_post = self.reddit_instance.random()
         await ctx.send(selected_post.url)
