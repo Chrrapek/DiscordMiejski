@@ -17,30 +17,45 @@ class AlwaysSecondRandom(Random):
 
 
 class TestDuelArena(TestCase):
+    challenger = "a"
+    target = "b"
+    prise = 1
 
     def test_should_add_duel(self):
         arena = DuelArena(AlwaysFirstRandom())
-        duel_result = arena.add_or_make_duel(server_id="1", challenger="a", prise=1, target="b")
+        duel_result = arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
         self.assertEqual(duel_result.status, DuelStatus.DUEL_CREATED)
 
     def test_should_make_duel(self):
         arena = DuelArena(AlwaysFirstRandom())
-        challenger = "a"
-        target = "b"
-        prise = 1
-        arena.add_or_make_duel(server_id="1", challenger=challenger, prise=prise, target=target)
-        duel_result = arena.add_or_make_duel(server_id="1", challenger=target, prise=prise, target=challenger)
+        arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
+        duel_result = arena.add_or_make_duel("1", challenger=self.target, prise=self.prise, target=self.challenger)
         self.assertEqual(duel_result.status, DuelStatus.CHALLENGER_WON)
-        self.assertEqual(duel_result.prise, prise)
+        self.assertEqual(duel_result.prise, self.prise)
 
     def test_not_make_duel_twice(self):
         arena = DuelArena(AlwaysSecondRandom())
-        challenger = "c"
-        target = "d"
-        prise = 1
-        arena.add_or_make_duel(server_id="1", challenger=challenger, prise=prise, target=target)
-        duel_result = arena.add_or_make_duel(server_id="1", challenger=challenger, prise=prise, target=target)
+        arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
+        duel_result = arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
         self.assertEqual(duel_result.status, DuelStatus.DUEL_ALREADY_CREATED)
+
+    def test_should_add_duel_after_previous_id_resolved(self):
+        arena = DuelArena(AlwaysSecondRandom())
+        arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
+        arena.add_or_make_duel("1", challenger=self.target, prise=self.prise, target=self.challenger)
+        duel_result = arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
+        self.assertEqual(duel_result.status, DuelStatus.DUEL_CREATED)
+
+    def test_target_should_not_be_challenger(self):
+        arena = DuelArena(AlwaysSecondRandom())
+        duel_result = arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.challenger)
+        self.assertEqual(duel_result.status, DuelStatus.CANNOT_DUEL_WITH_YOURSELF)
+
+    def test_should_take_prise_from_proposal(self):
+        arena = DuelArena(AlwaysFirstRandom())
+        arena.add_or_make_duel("1", challenger=self.challenger, prise=self.prise, target=self.target)
+        duel_result = arena.add_or_make_duel("1", challenger=self.target, prise=self.prise + 1, target=self.challenger)
+        self.assertEqual(duel_result.prise, self.prise)
 
 
 if __name__ == '__main__':
