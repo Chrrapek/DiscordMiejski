@@ -13,7 +13,7 @@ class MemoryCog(commands.Cog):
         self.arena = DuelArena(Random())
 
     @commands.command()
-    async def duel(self, ctx, target: discord.User, prise: int):
+    async def duel(self, ctx, target: discord.User, prise: int = 0):
         challenger_id = str(ctx.author.id)
         challenger_name = str(ctx.author.name)
         target_name = str(target.name)
