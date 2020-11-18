@@ -12,15 +12,15 @@ class DuelStatus(Enum):
 
 
 class DuelResult:
-    def __init__(self, status: DuelStatus, prise: int = None):
+    def __init__(self, status: DuelStatus, prize: int = None):
         self.status: DuelStatus = status
-        self.prise: int = prise
+        self.prize: int = prize
 
 
 class DuelProposal:
-    def __init__(self, target: str, prise: int):
+    def __init__(self, target: str, prize: int):
         self.target: str = target
-        self.prise: int = prise
+        self.prize: int = prize
 
 
 class ServerDuels:
@@ -39,24 +39,24 @@ class DuelArena:
         self.random = random
         self.open_duels: Dict[str, ServerDuels] = {}
 
-    def add_or_make_duel(self, server_id: str, challenger: str, prise: int, target: str) -> DuelResult:
+    def add_or_make_duel(self, server_id: str, challenger: str, prize: int, target: str) -> DuelResult:
         if challenger == target:
             return DuelResult(DuelStatus.CANNOT_DUEL_WITH_YOURSELF)
         if self.proposal_exists(server_id, challenger, target):
-            return DuelResult(status=DuelStatus.DUEL_ALREADY_CREATED, prise=prise)
+            return DuelResult(status=DuelStatus.DUEL_ALREADY_CREATED, prize=prize)
         if self.reverse_proposal_exists(server_id, challenger, target):
             proposal = self.open_duels[server_id].open_duels[target][challenger]
             self.open_duels[server_id].open_duels[target].pop(challenger)
             winner = self.random.choice([challenger, target])
             if winner == challenger:
-                return DuelResult(status=DuelStatus.CHALLENGER_WON, prise=proposal.prise)
+                return DuelResult(status=DuelStatus.CHALLENGER_WON, prize=proposal.prize)
             else:
-                return DuelResult(status=DuelStatus.TARGET_WON, prise=proposal.prise)
+                return DuelResult(status=DuelStatus.TARGET_WON, prize=proposal.prize)
         if server_id not in self.open_duels:
             self.open_duels[server_id] = ServerDuels()
         self.open_duels[server_id].add_proposal(challenger=challenger,
-                                                proposal=DuelProposal(target=target, prise=prise))
-        return DuelResult(status=DuelStatus.DUEL_CREATED, prise=prise)
+                                                proposal=DuelProposal(target=target, prize=prize))
+        return DuelResult(status=DuelStatus.DUEL_CREATED, prize=prize)
 
     def proposal_exists(self, server_id: str, challenger: str, target: str):
         if server_id in self.open_duels:

@@ -7,13 +7,13 @@ from cogs.duel.DuelArena import DuelArena, DuelStatus
 from controllers.DatabaseController import DatabaseController
 
 
-class MemoryCog(commands.Cog):
+class DuelCog(commands.Cog):
     def __init__(self, db: DatabaseController, **kwargs):
         self.db = db
         self.arena = DuelArena(Random())
 
     @commands.command()
-    async def duel(self, ctx, target: discord.User, prise: int = 0):
+    async def duel(self, ctx, target: discord.User, prize: int = 0):
         challenger_id = str(ctx.author.id)
         challenger_name = str(ctx.author.name)
         target_name = str(target.name)
@@ -21,16 +21,16 @@ class MemoryCog(commands.Cog):
         target_id = str(target.id)
         challenger_points = await self.db.fetch_user_points(challenger_id, server_id)
         target_points = await self.db.fetch_user_points(target_id, server_id)
-        if challenger_points < prise:
+        if challenger_points < prize:
             await ctx.send("Panie kolego, nie ma tak")
             return
-        if target_points < prise:
+        if target_points < prize:
             await ctx.send("Cel jest zabyt biedny")
             return
-        if not self.arena.reverse_proposal_exists(server_id, challenger_id, target_id) and prise < 1:
+        if not self.arena.reverse_proposal_exists(server_id, challenger_id, target_id) and prize < 1:
             await ctx.send("Panie kolego, nie ma tak")
 
-        duel_result = self.arena.add_or_make_duel(server_id, challenger_id, prise, target_id)
+        duel_result = self.arena.add_or_make_duel(server_id, challenger_id, prize, target_id)
         if duel_result.status == DuelStatus.DUEL_CREATED:
             await ctx.send("Walka czeka")
             return
@@ -42,16 +42,16 @@ class MemoryCog(commands.Cog):
             return
 
         if duel_result.status == DuelStatus.TARGET_WON:
-            new_target_points = target_points + duel_result.prise
-            new_challenger_points = challenger_points - duel_result.prise
+            new_target_points = target_points + duel_result.prize
+            new_challenger_points = challenger_points - duel_result.prize
             await self.db.upsert_user_points(server_id, target_id, target_name, new_target_points)
             await self.db.upsert_user_points(server_id, challenger_id, challenger_name, new_challenger_points)
             await self.send_result(challenger_name, ctx, new_challenger_points, new_target_points, target_name)
             return
 
         if duel_result.status == DuelStatus.CHALLENGER_WON:
-            new_target_points = target_points - duel_result.prise
-            new_challenger_points = challenger_points + duel_result.prise
+            new_target_points = target_points - duel_result.prize
+            new_challenger_points = challenger_points + duel_result.prize
             await self.db.upsert_user_points(server_id, target_id, target_name, new_target_points)
             await self.db.upsert_user_points(server_id, challenger_id, challenger_name, new_challenger_points)
             await self.send_result(target_name, ctx, new_target_points, new_challenger_points, challenger_name)
