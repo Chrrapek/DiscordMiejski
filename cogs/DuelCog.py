@@ -1,8 +1,9 @@
 from random import Random
 
+import discord
 from discord.ext import commands
 
-from cogs.duel.DuelArena import DuelArena
+from cogs.duel.DuelArena import DuelArena, DuelStatus
 from controllers.DatabaseController import DatabaseController
 
 
@@ -12,7 +13,50 @@ class MemoryCog(commands.Cog):
         self.arena = DuelArena(Random())
 
     @commands.command()
-    async def duel(self, ctx, target: str, prise: int):
-        challenger = ctx.author.name
-        server_id = ctx.guild.id
+    async def duel(self, ctx, target: discord.User, prise: int):
+        challenger_id = str(ctx.author.id)
+        challenger_name = str(ctx.author.name)
+        target_name = str(target.name)
+        server_id = str(ctx.guild.id)
+        target_id = str(target.id)
+        challenger_points = await self.db.fetch_user_points(challenger_id, server_id)
+        target_points = await self.db.fetch_user_points(target_id, server_id)
+        if challenger_points < prise:
+            await ctx.send("Panie kolego, nie ma tak")
+            return
+        if target_points < prise:
+            await ctx.send("Cel jest zabyt biedny")
+            return
+        duel_result = self.arena.add_or_make_duel(server_id, challenger_id, prise, target_id)
+        if duel_result.status == DuelStatus.DUEL_CREATED:
+            await ctx.send("Walka czeka")
+            return
+        if duel_result.status == DuelStatus.CANNOT_DUEL_WITH_YOURSELF:
+            await ctx.send("Ale weź kogoś jeszcze")
+            return
+        if duel_result.status == DuelStatus.DUEL_ALREADY_CREATED:
+            await ctx.send("Daj się najpierw raz sklepać")
+            return
+
+        if duel_result.status == DuelStatus.TARGET_WON:
+            new_target_points = target_points + duel_result.prise
+            new_challenger_points = challenger_points - duel_result.prise
+            await self.db.upsert_user_points(server_id, target_id, target_name, new_target_points)
+            await self.db.upsert_user_points(server_id, challenger_id, challenger_name, new_challenger_points)
+            await self.send_result(challenger_name, ctx, new_challenger_points, new_target_points, target_name)
+            return
+
+        if duel_result.status == DuelStatus.CHALLENGER_WON:
+            new_target_points = target_points - duel_result.prise
+            new_challenger_points = challenger_points + duel_result.prise
+            await self.db.upsert_user_points(server_id, target_id, target_name, new_target_points)
+            await self.db.upsert_user_points(server_id, challenger_id, challenger_name, new_challenger_points)
+            await self.send_result(target_name, ctx, new_target_points, new_challenger_points, challenger_name)
+            return
+        await ctx.send("Nie powinno mnie tu być")
         pass
+
+    @staticmethod
+    async def send_result(loser_name, ctx, loser_points, winner_points, winner_name):
+        await ctx.send(
+            f'{winner_name} pyknął {loser_name} i ma teraz {winner_points}. Przegranemu zostało tylko {loser_points}')
