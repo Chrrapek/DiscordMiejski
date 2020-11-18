@@ -27,6 +27,9 @@ class MemoryCog(commands.Cog):
         if target_points < prise:
             await ctx.send("Cel jest zabyt biedny")
             return
+        if not self.arena.reverse_proposal_exists(server_id, challenger_id, target_id) and prise < 1:
+            await ctx.send("Panie kolego, nie ma tak")
+
         duel_result = self.arena.add_or_make_duel(server_id, challenger_id, prise, target_id)
         if duel_result.status == DuelStatus.DUEL_CREATED:
             await ctx.send("Walka czeka")
