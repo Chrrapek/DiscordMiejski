@@ -25,7 +25,7 @@ class DuelCog(commands.Cog):
                   f"Tu czekają na Ciebie:\n" \
                   f"{formatted_rivals}" \
                   f""
-        pass
+        await ctx.send(message)
 
     @commands.command()
     async def duel(self, ctx, target: discord.User, prize: int = 0):
