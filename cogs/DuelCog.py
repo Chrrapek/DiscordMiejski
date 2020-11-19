@@ -21,7 +21,7 @@ class DuelCog(commands.Cog):
         formatted_opened = "\n".join(open_duels)
         formatted_rivals = "\n".join([f"`!duel @{rival}" for rival in rivals])
         message = f"Tu czekasz: \n" \
-                  f"{formatted_opened}" \
+                  f"{formatted_opened}\n" \
                   f"Tu czekają na Ciebie:\n" \
                   f"{formatted_rivals}" \
                   f""
