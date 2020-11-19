@@ -12,7 +12,7 @@ class DuelCog(commands.Cog):
         self.db = db
         self.arena = DuelArena(Random())
 
-    @commands.command()
+    @commands.command(name="duel-list")
     async def duel_list(self, ctx):
         challenger_id = str(ctx.author.id)
         server_id = str(ctx.guild.id)

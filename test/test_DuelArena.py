@@ -63,6 +63,11 @@ class TestDuelArena(TestCase):
         self.assertEqual(arena.list_user_open_duels_rivals("1", self.challenger), [self.target])
         self.assertEqual(arena.list_user_waiting_duels_rivals("1", self.target), [self.challenger])
 
+    def test_should_list_empty(self):
+        arena = DuelArena(AlwaysFirstRandom())
+        self.assertEqual(arena.list_user_open_duels_rivals("1", self.challenger), [])
+        self.assertEqual(arena.list_user_waiting_duels_rivals("1", self.target), [])
+
 
 if __name__ == '__main__':
     unittest.main()
