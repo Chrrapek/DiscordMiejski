@@ -1,6 +1,6 @@
 from enum import Enum
 from random import Random
-from typing import Dict
+from typing import Dict, List
 
 
 class DuelStatus(Enum):
@@ -38,6 +38,12 @@ class DuelArena:
     def __init__(self, random: Random):
         self.random = random
         self.open_duels: Dict[str, ServerDuels] = {}
+
+    def list_user_open_duels_rivals(self, server_id: str, challenger: str) -> List[str]:
+        return list(self.open_duels[server_id].open_duels[challenger].keys())
+
+    def list_user_waiting_duels_rivals(self, server_id: str, target: str):
+        return [name for name, proposals in self.open_duels[server_id].open_duels.items() if target in proposals]
 
     def add_or_make_duel(self, server_id: str, challenger: str, prize: int, target: str) -> DuelResult:
         if challenger == target:
