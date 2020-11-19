@@ -40,10 +40,15 @@ class DuelArena:
         self.open_duels: Dict[str, ServerDuels] = {}
 
     def list_user_open_duels_rivals(self, server_id: str, challenger: str) -> List[str]:
-        return list(self.open_duels[server_id].open_duels[challenger].keys())
+        if server_id in self.open_duels:
+            if challenger in self.open_duels[server_id].open_duels:
+                return list(self.open_duels[server_id].open_duels[challenger].keys())
+        return []
 
     def list_user_waiting_duels_rivals(self, server_id: str, target: str):
-        return [name for name, proposals in self.open_duels[server_id].open_duels.items() if target in proposals]
+        if server_id in self.open_duels:
+            return [name for name, proposals in self.open_duels[server_id].open_duels.items() if target in proposals]
+        return []
 
     def add_or_make_duel(self, server_id: str, challenger: str, prize: int, target: str) -> DuelResult:
         if challenger == target:
