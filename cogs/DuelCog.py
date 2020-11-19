@@ -29,6 +29,7 @@ class DuelCog(commands.Cog):
             return
         if not self.arena.reverse_proposal_exists(server_id, challenger_id, target_id) and prize < 1:
             await ctx.send("Panie kolego, nie ma tak")
+            return
 
         duel_result = self.arena.add_or_make_duel(server_id, challenger_id, prize, target_id)
         if duel_result.status == DuelStatus.DUEL_CREATED:
