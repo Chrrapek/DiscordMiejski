@@ -3,10 +3,10 @@ import os
 
 import asyncpg
 import praw
-from cogs.MemoryCog import MemoryCog
 from discord.ext import commands
 
 from cogs.ChooseCog import ChooseCog
+from cogs.DuelCog import DuelCog
 from cogs.GamblerCog import GamblerCog
 from cogs.GuessCog import GuessCog
 from cogs.HelpCog import HelpCog
@@ -45,7 +45,7 @@ class Bot(commands.Bot):
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
         self.add_cog(RabbinCog(self))
-        self.add_cog(MemoryCog())
+        self.add_cog(DuelCog(db=db))
 
     async def on_ready(self):
         print('Logged in as')
