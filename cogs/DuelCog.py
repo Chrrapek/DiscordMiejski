@@ -19,7 +19,7 @@ class DuelCog(commands.Cog):
         rivals = self.arena.list_user_waiting_duels_rivals(server_id, challenger_id)
         open_duels = self.arena.list_user_open_duels_rivals(server_id, challenger_id)
         formatted_opened = "\n".join(open_duels)
-        formatted_rivals = "\n".join([f"`!duel @{rival}" for rival in rivals])
+        formatted_rivals = "\n".join([f"`!duel @{rival}`" for rival in rivals])
         message = f"Tu czekasz: \n" \
                   f"{formatted_opened}\n" \
                   f"Tu czekają na Ciebie:\n" \
