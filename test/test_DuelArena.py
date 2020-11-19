@@ -57,6 +57,12 @@ class TestDuelArena(TestCase):
         duel_result = arena.add_or_make_duel("1", challenger=self.target, prize=self.prize + 1, target=self.challenger)
         self.assertEqual(duel_result.prize, self.prize)
 
+    def test_should_list_user_duels(self):
+        arena = DuelArena(AlwaysFirstRandom())
+        arena.add_or_make_duel("1", challenger=self.challenger, prize=self.prize, target=self.target)
+        self.assertEqual(arena.list_user_open_duels_rivals("1", self.challenger), [self.target])
+        self.assertEqual(arena.list_user_waiting_duels_rivals("1", self.target), [self.challenger])
+
 
 if __name__ == '__main__':
     unittest.main()
