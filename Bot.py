@@ -45,7 +45,7 @@ class Bot(commands.Bot):
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
         self.add_cog(RabbinCog(self))
-        self.add_cog(DuelCog(db=db))
+        self.add_cog(DuelCog(db=db, bot=self))
 
     async def on_ready(self):
         print('Logged in as')
