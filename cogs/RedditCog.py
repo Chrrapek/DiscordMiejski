@@ -5,8 +5,7 @@ import random
 
 
 class RedditCog(commands.Cog):
-    def __init__(self, bot, reddit_instance: Subreddit):
-        self.bot = bot
+    def __init__(self, reddit_instance: Subreddit):
         self.reddit_instance = reddit_instance
 
     @commands.command(name="hmmm-top")

@@ -3,14 +3,16 @@ from random import Random
 import discord
 from discord.ext import commands
 
+from Bot import Bot
 from cogs.duel.DuelArena import DuelArena, DuelStatus
 from controllers.DatabaseController import DatabaseController
 
 
 class DuelCog(commands.Cog):
-    def __init__(self, db: DatabaseController, **kwargs):
+    def __init__(self, db: DatabaseController, bot: Bot):
         self.db = db
         self.arena = DuelArena(Random())
+        self.bot = bot
 
     @commands.command(name="duel-list")
     async def duel_list(self, ctx):
@@ -18,13 +20,12 @@ class DuelCog(commands.Cog):
         server_id = str(ctx.guild.id)
         rivals = self.arena.list_user_waiting_duels_rivals(server_id, challenger_id)
         open_duels = self.arena.list_user_open_duels_rivals(server_id, challenger_id)
-        formatted_opened = "\n".join(open_duels)
-        formatted_rivals = "\n".join([f"`!duel @{rival}`" for rival in rivals])
+        formatted_opened = "\n".join([self.bot.get_user(int(name)).name for name in open_duels])
+        formatted_rivals = "\n".join([f"`!duel @{self.bot.get_user(rival).name}`" for rival in rivals])
         message = f"Tu czekasz: \n" \
                   f"{formatted_opened}\n" \
                   f"Tu czekają na Ciebie:\n" \
-                  f"{formatted_rivals}" \
-                  f""
+                  f"{formatted_rivals}"
         await ctx.send(message)
 
     @commands.command()
