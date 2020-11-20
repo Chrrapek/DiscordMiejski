@@ -39,13 +39,13 @@ class Bot(commands.Bot):
             command_prefix='!'
         )
         self.add_cog(MiejskiCog(self, db=db))
-        self.add_cog(RedditCog(self, reddit_instance))
+        self.add_cog(RedditCog(reddit_instance))
         self.add_cog(ChooseCog(self))
         self.add_cog(GamblerCog(self, db=db))
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
         self.add_cog(RabbinCog(self))
-        self.add_cog(DuelCog(db=db))
+        self.add_cog(DuelCog(db=db, bot=self))
 
     async def on_ready(self):
         print('Logged in as')
