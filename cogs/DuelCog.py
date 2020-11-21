@@ -22,10 +22,10 @@ class DuelCog(commands.Cog):
         open_duels = self.arena.list_user_open_duels(server_id, challenger_id)
 
         formatted_opened = "\n".join(
-            [f"{self.name_extractor(int(name))}: {points}" for name, points in open_duels]
+            [f"{self.name_extractor(int(name))}: {points}" for name, points in open_duels.items()]
         )
         formatted_rivals = "\n".join(
-            [f"`!duel @{self.name_extractor(int(rival_name))} {points}`" for rival_name, points in rivals]
+            [f"`!duel @{self.name_extractor(int(rival_name))} {points}`" for rival_name, points in rivals.items()]
         )
         message = f"Tu czekasz: \n" \
                   f"{formatted_opened}\n" \
