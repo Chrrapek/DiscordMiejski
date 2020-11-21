@@ -28,4 +28,7 @@ class DatabaseController:
         result: List[Record] = await self.db.fetch('SELECT * FROM users WHERE USER_ID=$1 AND SERVER_ID=$2',
                                                    user_id,
                                                    server_id)
-        return int(result[0]["points"])
+        if len(result) > 0:
+            return int(result[0]["points"])
+        else:
+            return 0
