@@ -1,6 +1,6 @@
 from enum import Enum
 from random import Random
-from typing import Dict, List, Tuple
+from typing import Dict
 
 
 class DuelStatus(Enum):
