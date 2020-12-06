@@ -35,7 +35,7 @@ class MiejskiMessage:
 
 class Miejski:
     @staticmethod
-    def get_message() -> MiejskiMessage:
+    async def get_message() -> MiejskiMessage:
         url = 'https://www.miejski.pl/losuj'
         r = requests.get(url, allow_redirects=True)
         http = BeautifulSoup(r.text, 'html.parser')
