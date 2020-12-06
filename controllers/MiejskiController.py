@@ -35,17 +35,17 @@ class MiejskiMessage:
 
 class Miejski:
     @staticmethod
-    async def get_message() -> MiejskiMessage:
+    def get_message() -> MiejskiMessage:
         url = 'https://www.miejski.pl/losuj'
         r = requests.get(url, allow_redirects=True)
         http = BeautifulSoup(r.text, 'html.parser')
-        title = [x.get_text() for x in http.findAll("h1")]
-        definition = [x.get_text() for x in http.findAll("p")]
-        example = [x.get_text() for x in http.findAll("blockquote")]
+        title = [x.get_text() for x in http.findAll("h1")][0].strip()
+        definition = [x.get_text() for x in http.findAll("p")][0].strip()
+        example = [x.get_text() for x in http.findAll("blockquote")][0].strip()
         rating = http.find("span", {"class": "rating"}).contents[0]
         print(f"[Title: {title}, definition: {definition}, example: {example}, rating: {rating}]")
-        return MiejskiMessage(title[0], rating[0], definition[0], example[0]) if len(example) > 0 else MiejskiMessage(
-            title[0], rating[0], definition[0])
+        return MiejskiMessage(title, rating, definition, example) if len(example) > 0 else MiejskiMessage(
+            title, rating, definition)
 
     @staticmethod
     def get_stats(records: List[Record]) -> str:
