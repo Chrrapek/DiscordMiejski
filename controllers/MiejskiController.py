@@ -38,6 +38,7 @@ class Miejski:
     async def get_message() -> MiejskiMessage:
         url = 'https://www.miejski.pl/losuj'
         r = requests.get(url, allow_redirects=True)
+        print(f"url: {r.request.url}")
         http = BeautifulSoup(r.text, 'html.parser')
         title = [x.get_text() for x in http.findAll("h1")][0].strip()
         definition = [x.get_text() for x in http.findAll("p")][0].strip()
