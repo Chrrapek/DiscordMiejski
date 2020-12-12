@@ -9,14 +9,14 @@ from utils.Utils import Utils
 
 class MiejskiMessage:
 
-    def __init__(self, title: str, rating: str, definition: str, example=''):
+    def __init__(self, title: str, rating: str, definition: str, example=None):
         self.title = title
         self.rating = rating
         self.definition = definition
         self.example = example
 
     def has_example(self) -> bool:
-        return len(self.example) > 0
+        return self.example
 
     def to_string(self) -> str:
         if self.has_example():
@@ -42,10 +42,10 @@ class Miejski:
         http = BeautifulSoup(r.text, 'html.parser')
         title = [x.get_text() for x in http.findAll("h1")][0].strip()
         definition = [x.get_text() for x in http.findAll("p")][0].strip()
-        example = [x.get_text() for x in http.findAll("blockquote")][0].strip()
+        example = [x.get_text() for x in http.findAll("blockquote")]
         rating = http.find("span", {"class": "rating"}).contents[0]
         print(f"[Title: {title}, definition: {definition}, example: {example}, rating: {rating}]")
-        return MiejskiMessage(title, rating, definition, example) if len(example) > 0 else MiejskiMessage(
+        return MiejskiMessage(title, rating, definition, example[0].strip()) if example else MiejskiMessage(
             title, rating, definition)
 
     @staticmethod
