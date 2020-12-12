@@ -5,6 +5,7 @@ from discord.ext.commands import Context
 
 from controllers.DatabaseController import DatabaseController
 from utils.ErrorMessages import ErrorMessages
+from utils.emoji import PEPE_SAD
 
 
 class GamblerCog(commands.Cog):
@@ -28,7 +29,7 @@ class GamblerCog(commands.Cog):
             if amount == 0:
                 multiplier = random.choice([0, 2])
                 if multiplier == 0:
-                    await ctx.send(f'Va banque! Niestety, {ctx.author.name}, ale tracisz wszystkie punkty...')
+                    await ctx.send(await self.lose_message(ctx))
                 else:
                     await ctx.send(
                         f'Va banque! Brawo {ctx.author.name}, podwajasz swoje punkty i masz ich teraz {points * multiplier}!')
@@ -45,6 +46,10 @@ class GamblerCog(commands.Cog):
                     await ctx.send(f'{ctx.author.name} nie wszedł pewniaczek i ma teraz {points - amount} punktów...')
             elif amount > points:
                 await ctx.send(f'{ctx.author.name} nie cwaniakuj, nie masz tyle punkcików')
+
+    async def lose_message(self, ctx):
+        return f'Va banque! Niestety, {ctx.author.name}, ale tracisz wszystkie punkty...' + str(
+            self.bot.get_emoji(PEPE_SAD))
 
     @gamble.error
     async def gamble_error(self, ctx, error):
