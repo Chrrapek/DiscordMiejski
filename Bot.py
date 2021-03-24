@@ -18,7 +18,7 @@ from praw.models import Subreddit
 
 
 async def run():
-    pool = await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL'))
+    pool = await asyncpg.create_pool(dsn=os.environ.get('DATABASE_URL')+'?sslmode=require')
     db = DatabaseController(pool)
     reddit = praw.Reddit(
         client_id=os.environ.get('REDDIT_APP_NAME'),
