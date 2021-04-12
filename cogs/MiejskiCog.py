@@ -15,6 +15,9 @@ class MiejskiCog(commands.Cog):
     @commands.cooldown(1, 600, commands.BucketType.user)
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
+        if ctx.author.id is '276384820408483841':
+            await ctx.send('Bana masz')
+            return
         current_points = await self.db.fetch_user_points(f'{ctx.author.id}', f'{ctx.guild.id}')
         message = await Miejski.get_message()
         await self.db.upsert_user_points(f'{ctx.guild.id}', f'{ctx.author.id}', f'{ctx.author.name}',
@@ -32,7 +35,8 @@ class MiejskiCog(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             print(f'Context author ID: {ctx.author.id}')
             user = self.bot.get_user(ctx.author.id)
-            await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')
+            print(f'User: {user.name}')
+            await ctx.author.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
             await ctx.send(ErrorMessages.get_random_error_message())
