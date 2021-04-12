@@ -48,7 +48,7 @@ class Bot(commands.Bot):
         self.add_cog(DuelCog(db=db, name_extractor=self.extract_user_name))
 
     def extract_user_name(self, user_id):
-        user = self.fetch_user(int(user_id))
+        user = self.get_user(int(user_id))
         return user.name
 
     async def on_ready(self):
