@@ -30,7 +30,7 @@ class MiejskiCog(commands.Cog):
     @miejski.error
     async def miejski_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            user = await self.bot.fetch_user(ctx.author.id)
+            user = self.bot.fetch_user(ctx.author.id)
             await user.send(f'Masz cooldown na !miejski. Jeszcze {error.retry_after} s')
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
