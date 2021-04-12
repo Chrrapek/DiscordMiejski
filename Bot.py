@@ -45,7 +45,11 @@ class Bot(commands.Bot):
         self.add_cog(HelpCog(self))
         self.add_cog(GuessCog(self))
         self.add_cog(RabbinCog(self))
-        self.add_cog(DuelCog(db=db, name_extractor=lambda user_id: (await self.fetch_user(int(user_id))).name))
+        self.add_cog(DuelCog(db=db, name_extractor=self.extract_user_name))
+
+    def extract_user_name(self, user_id):
+        user = await self.fetch_user(int(user_id))
+        return user.name
 
     async def on_ready(self):
         print('Logged in as')
