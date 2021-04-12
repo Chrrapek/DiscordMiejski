@@ -15,7 +15,7 @@ class MiejskiCog(commands.Cog):
     @commands.cooldown(1, 600, commands.BucketType.user)
     async def miejski(self, ctx: Context):
         print('Recieved command !miejski from ' + ctx.author.name + ', processing...')
-        if ctx.author.id is '276384820408483841':
+        if ctx.author.id is 276384820408483841:
             await ctx.send('Bana masz')
             return
         current_points = await self.db.fetch_user_points(f'{ctx.author.id}', f'{ctx.guild.id}')

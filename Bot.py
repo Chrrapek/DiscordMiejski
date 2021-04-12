@@ -2,6 +2,7 @@ import asyncio
 import os
 
 import asyncpg
+import discord
 import praw
 from discord.ext import commands
 
@@ -25,7 +26,9 @@ async def run():
         client_secret=os.environ.get('REDDIT_SECRET'),
         user_agent="ChrapBot by u/Chramar"
     ).subreddit("hmmm")
-    bot = Bot(db, reddit)
+    intents = discord.Intents.default()
+    intents.members = True
+    bot = Bot(db, reddit, intents)
     try:
         await bot.start(os.environ.get('DISCORD_TOKEN'))
     except KeyboardInterrupt:
@@ -34,9 +37,10 @@ async def run():
 
 
 class Bot(commands.Bot):
-    def __init__(self, db: DatabaseController, reddit_instance: Subreddit, **kwargs):
+    def __init__(self, db: DatabaseController, reddit_instance: Subreddit, intents,  **kwargs):
         super().__init__(
-            command_prefix='!'
+            command_prefix='!',
+            intents=intents
         )
         self.add_cog(MiejskiCog(self, db=db))
         self.add_cog(RedditCog(reddit_instance))
