@@ -61,8 +61,7 @@ class GamblerCog(commands.Cog):
     @gamble.error
     async def gamble_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            user = self.bot.get_user(ctx.author.id)
-            await user.send(f'Masz cooldown na !gamble. Jeszcze {error.retry_after} s')
+            await ctx.author.send(f'Masz cooldown na !gamble. Jeszcze {error.retry_after} s')
         else:
             print(f'Error wywolany przez {ctx.author.name}: {error}')
             await ctx.send(ErrorMessages.get_random_error_message())
